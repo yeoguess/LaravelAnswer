@@ -1,4 +1,4 @@
-<?php
+wers<?php
 
 namespace App\Http\Controllers\Auth;
 

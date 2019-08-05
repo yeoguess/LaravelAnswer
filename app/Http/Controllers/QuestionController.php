@@ -14,7 +14,13 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        // Go to the model and get a group of records
+        // $questions = Question::all();
+        // $questions = Question::paginate(2);
+        $questions = Question::orderBy('id', 'desc')->paginate(2);
+
+        // Return the view and pass in the group of records to loop through
+        return view('questions.index')->with('questions', $questions);
     }
 
     /**
@@ -47,8 +53,9 @@ class QuestionController extends Controller
         $question->save(); 
 
         // if successful we want to redirect
-        if ($question->save()) {
-            return redirect()->route('questions.show');
+        if ($question->save())
+        {
+            return redirect()->route('questions.show',$question->id);
         } else {
             return redirect()->route('questions.create');
         }
@@ -62,7 +69,12 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        //
+        // Use the model to get 1 record from the database
+        $question = Question::findOrFail($id);
+
+        // Show the view and pass the record to the view
+        return view('questions.show')->with('question', $question);
+
     }
 
     /**

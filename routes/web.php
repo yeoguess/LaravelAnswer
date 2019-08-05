@@ -11,12 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-
-Route::get('/about', 'PageController@about')->name('about');
-Route::get('/contact', 'PageController@contact')->name('contact');
-Route::post('/contact', 'PageController@submit');
 Route::resource('questions', 'QuestionController');
+Route::resource('answers', 'AnswersController', ['except' => ['index', 'create', 'show']]);
+Route::get('/', 'PageController@index')->name('index');
+Route::get('/about', 'PageController@about')->name('about');
