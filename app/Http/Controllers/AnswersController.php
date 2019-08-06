@@ -22,7 +22,7 @@ class AnswersController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'content'       =>  "required|min:15",
+            'content'       =>  "required|min:5",
             'question_id'   =>  'required|integer'
         ]);
 
@@ -30,7 +30,7 @@ class AnswersController extends Controller
         $answer->content = $request->content;
         $answer->user()->associate(Auth::id());
 
-        
+
         $question = Question::findOrFail($request->question_id);
         $question->answers()->save($answer);
 
@@ -45,7 +45,11 @@ class AnswersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $question = Answer::findOfFail($id);
+        if ($question->user->id != Auth::id()) {
+            return abort(403);
+        }
+        return view('answers.edit');
     }
 
     /**
@@ -57,7 +61,10 @@ class AnswersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $question = Answer::findOfFail($id);
+        if ($question->user->id != Auth::id()) {
+            return abort(403);
+        }
     }
 
     /**
