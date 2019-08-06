@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Question;
+use Auth;
 
 class QuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -50,7 +55,7 @@ class QuestionController extends Controller
         $question = new Question();
         $question->title = $request->title;
         $question->description = $request->description;
-        $question->save(); 
+        $question->user()->associate(Auth::id());
 
         // if successful we want to redirect
         if ($question->save())
@@ -85,7 +90,11 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $question = Question::findOfFail($id);
+        if($question->user->id != Auth::id()) {
+            return abort(403);
+        }
+        return view('questions.edit');
     }
 
     /**
@@ -97,7 +106,12 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $question = Question::findOfFail($id);
+        if($question->user->id != Auth::id()) {
+            return abort(403);
+        }
+
+        // Update the question
     }
 
     /**

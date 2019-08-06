@@ -6,6 +6,9 @@
         <p class="lead">
             {{ $question->description }}
         </p>
+        <p>
+            Submitted By: {{ $question->user->name }}, {{ $question->created_at->diffForHumans() }}
+        </p>
         <hr>
         {{-- display all of the answers for this question --}}
         @if($question->answers->count() > 0)
@@ -15,8 +18,9 @@
                         <p>
                             {{ $answer->content }}
                         </p>
+                        <h6>Answered By {{ $answer->user->name }}, {{ $answer->created_at->diffForHumans() }}</h6>
                     </div>
-                </div>   
+                </div>
             @endforeach
         @else
             <p>There are no answers for this question yet. Please consider submitting one below!</p>
